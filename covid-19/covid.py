@@ -32,7 +32,7 @@ Age_data = csv_data["年代"]
 
 class Analysis():
 
-    def Gender(self):
+    def Gender(self, lang):
         M=0
         F=0
         U=0
@@ -50,7 +50,10 @@ class Analysis():
 
         ratio_W = ratio_M + ratio_F + ratio_U
 
-        text = "感染者(性別割合)\n男性: %.3f％\t\t女性: %.3f％\t\t性別不明: %.3f％\t\t合計: %.3f％" %(ratio_M,ratio_F,ratio_U,ratio_W)
+        if lang == 'Japanese':
+            text = "感染者(性別割合)\n男性: %.3f％\t\t女性: %.3f％\t\t性別不明: %.3f％\t\t合計: %.3f％" %(ratio_M,ratio_F,ratio_U,ratio_W)
+        elif lang == 'English':
+            text = "the Infected(gender)\nMale: %.3f％\t\tFemale: %.3f％\t\tUnkown: %.3f％\t\tTotal: %.3f％" %(ratio_M,ratio_F,ratio_U,ratio_W)
         print(text)
         #return text
         #print("感染者(性別割合)\n\n男性: "+str(ratio_M)+"\t女性: "+str(ratio_F)+"\t性別不明: "+str(ratio_U)+"\t合計: "+str(ratio_W))
@@ -82,7 +85,7 @@ class Analysis():
 
         ratio_W_ = ratio_Ja + ratio_Un + ratio_Fo
 
-        text = "\n\n感染者(居住地割合)\n日本: %.3f％\t\t海外: %.3f％\t\t居住地不明: %.3f％\t\t合計: %.3f％\n\n"%(ratio_Ja, ratio_Un, ratio_Fo, ratio_W_)
+        text = "\n\nthe Infected(Resident)\nJapan: %.3f％\t\tOther countries: %.3f％\t\tUnkown: %.3f％\t\tTotal: %.3f％\n\n"%(ratio_Ja, ratio_Un, ratio_Fo, ratio_W_)
         print(text)
         #return text
 
@@ -106,9 +109,9 @@ class Analysis():
                 ratio = num/len(self.J)*100
                 caution = "#"*int(ratio)
                 if int(ratio)==0:
-                    print("%s: %.3f ％   \t\t%d 人" %(p, ratio, num))
+                    print("%s: %.3f ％   \t\t%d people" %(p, ratio, num))
                 else:
-                    print("%s: %.3f ％   \t\t%d 人\t\t%s  %s (%d％)" %(p, ratio, num, caution, p, int(ratio)))
+                    print("%s: %.3f ％   \t\t%d people\t\t%s  %s (%d％)" %(p, ratio, num, caution, p, int(ratio)))
 
 
     def Resident_j(self):
@@ -167,7 +170,7 @@ class Analysis():
 
 
 
-    def Age(self):
+    def Age(self, lang):
         for i in range(1,6):
             exec("age_%d = %d" %(10*i, 0))
         age_under_10 = 0
@@ -194,35 +197,49 @@ class Analysis():
                 age_over_60 += 1
 
         S = age_under_10 + age_over_60 + unknown
-        
-        print("\n10歳未満: %d人" %(age_under_10))
-        for i in range(1,6):
-            age = eval("age_%d" %(10*i))
-            S += age
-            print("\n%d代: %d 人" %(10*i, age))
-        print("\n60歳以上: %d 人" %(age_over_60))
-        print("\n不明: %d 人" %(unknown))
-        print("\n合計: %d" %(S))
+
+        if lang == "Japanese":
+            print("\n10歳未満: %d人" %(age_under_10))
+            for i in range(1,6):
+                age = eval("age_%d" %(10*i))
+                S += age
+                print("\n%d代: %d 人" %(10*i, age))
+            print("\n60歳以上: %d 人" %(age_over_60))
+            print("\n不明: %d 人" %(unknown))
+            print("\n合計: %d 人" %(S))
+
+        elif lang == "English":
+            print("\nunder 10 years old: %dpeople" %(age_under_10))
+            for i in range(1,6):
+                age = eval("age_%d" %(10*i))
+                S += age
+                print("\n%ds: %d people" %(10*i, age))
+            print("\nover 60 years old: %d people" %(age_over_60))
+            print("\nunkown: %d people" %(unknown))
+            print("\nTotal: %d people" %(S))
+
         
 if __name__ == '__main__':
     while True:
         A = Analysis()
         #print(A.Gender())
-        A.Gender()
         #print(A.Resident_e())
 
         while True:
             o = input("日本語表示/ 0を入力\t英語表示/ 1を入力\n入力: ")
-            if o == '0':                
+            if o == '0':
+                A.Gender("Japanese")                
                 A.Resident_j()
                 A.Prefecture_j()
+                A.Age("Japanese")
                 break
             elif o == '1':
+                A.Gender("English")
                 A.Resident_e()
                 A.Prefecture_e()
+                A.Age("English")
                 break
 
-        A.Age()
 
         a = input("閉じる/ 0を入力: ")
         if a == '0':
