@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import requests
 import io
 
@@ -179,22 +180,26 @@ class Analysis():
         Age = pd.DataFrame(Age_data)
         
         for a in Age["年代"]:
-            if a == "0-10":
-                age_under_10 += 1
-            elif a == "不明":
-                unknown += 1
-            elif int(a) < 20:
-                exec("age_%d += %d" %(10, 1))
-            elif int(a) < 30:
-                exec("age_%d += %d" %(20, 1))
-            elif int(a) < 40:
-                exec("age_%d += %d" %(30, 1))
-            elif int(a) < 50:
-                exec("age_%d += %d" %(40, 1))
-            elif int(a) < 60:
-                exec("age_%d += %d" %(50, 1))
-            else:
-                age_over_60 += 1
+            try:
+                if a == "0-10":
+                    age_under_10 += 1
+                elif a == "不明":
+                    unknown += 1
+                elif int(a) < 20:
+                    exec("age_%d += %d" %(10, 1))
+                elif int(a) < 30:
+                    exec("age_%d += %d" %(20, 1))
+                elif int(a) < 40:
+                    exec("age_%d += %d" %(30, 1))
+                elif int(a) < 50:
+                    exec("age_%d += %d" %(40, 1))
+                elif int(a) < 60:
+                    exec("age_%d += %d" %(50, 1))
+                else:
+                    age_over_60 += 1
+            except:
+                if np.isnan(a):
+                    pass
 
         S = age_under_10 + age_over_60 + unknown
 
